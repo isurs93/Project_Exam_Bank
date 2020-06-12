@@ -1,0 +1,170 @@
+<%@page import="com.jsplec.exam.dao.UserDao"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+ <%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>기출문제 은행</title>
+    <link rel="stylesheet" href="index.css" />
+     <link
+      rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+      integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+<%
+request.setCharacterEncoding("utf-8");
+
+%>
+  <jsp:include page="IncludePage.jsp"/>
+      <div class="main">
+      <form action = "#">
+          <h1 class = "h1" style="margin-left:-35px;"><i class="fas fa-users-cog" style = "margin-right:15px;"></i>회원정보관리</h1>
+        <table style = "align-items: center;">
+        	<tr>
+        		<td colspan = "5" style ="height:40px; width:50px; opacity: 95%;" >
+	        		<select name = "select" style ="height:30px; width:150px; margin-left:50px;">
+		            	<option value = "userId">아이디</option>
+		            	<option value = "userTelno">전화번호</option>
+	           	    </select>
+	           	    <input type = "text" name = "query" style="width:400px; height: 30px; border: 0; text-align:right; background-color: #e2e2e2;" >
+            		<input type = "submit" name = "serachBtn" value = "검색" style="width:100px; height: 30px;  margin-right:50px;" formaction="userManagementList.do" >
+            		<!-- <button onclick = "location.href='list.do'" style="width:100px; height: 30px;  margin-right:50px;">검색</button> -->
+				</td>
+        	</tr>
+        	<tr style="border:2px;">
+	            <th id = "no">회원번호</th>
+	            <th class = "title">아이디</th>
+	            <th class = "day">가입일자</th>
+	            <th class = "day">탈퇴일자</th>
+	        </tr>   
+      	 	<c:forEach items="${UList }" var="dto">
+          <tr>
+             <td class = "no">${dto.userSeq}</td>
+             <td id = "title"> <a href="userManagementSelect.do?userSeq=${dto.userSeq}">${dto.userId}</a></td>
+             <td>${dto.joinDate}</td>
+             <td>${dto.outDate}</td>
+          </tr>
+			</c:forEach>
+			<tr>
+				<td colspan = "5">
+				<%if(request.getParameter("index") != null){ // <<-,  <- 버튼 효시 할지 결정 %>
+					<%if(Integer.parseInt(request.getParameter("index"))-5 < 0){%>
+						<a href = "userManagementList.do?index=0">&lt;&lt;</a>
+					<%}else{%>
+						<a href = "userManagementList.do?index=<%=Integer.parseInt(request.getParameter("index"))-5%>">&lt;&lt;</a>
+						
+					<%}if(Integer.parseInt(request.getParameter("index"))-1 < 0){%>
+						<a href = "userManagementList.do?index=0">&lt;</a>
+					<%}else{%>
+						<a href = "userManagementList.do?index=<%=Integer.parseInt(request.getParameter("index"))-1%>">&lt;</a>
+					<%} %>
+				<%}
+				  else{%>
+					  	<a href = "userManagementList.do?index=0">&lt;&lt;</a>
+					  	<a href = "userManagementList.do?index=0">&lt;</a>
+				<%}
+				  // 리스트와 인덱스가 있을 경우 페이징을 시작한다.
+				  if(session.getAttribute("ListCount") != null && request.getParameter("index") != null){
+						// 이거는 리스트 카운트가 몇인지 알기 위한 콘솔 출력.
+				  		System.out.println("listCount = " + session.getAttribute("ListCount"));
+
+						// pageNum 은 현재 표시 할 페이지의 번호.
+						int pageNum = Integer.parseInt(request.getParameter("index"));
+						// countNum 은 전체 몇 페이지까지 있다 인식하는 번호.
+						double countNum = (int) session.getAttribute("ListCount");
+						
+						int LastNum = 0;  // 페이지 표시할 마지막 버튼 번호.
+						int StartNum = 0; // 페이지 표시할 시작 버튼 시작 번호.
+						
+						// 이 for문은 버튼을 몇 까지 표시할지 정한다.
+						// 페이지 버튼을 5개씩 나타낼것이기 때문에 50으로 나누어 표시한다.
+						// 다르게 표시 할 것이면 나누는 숫자 50을 다른 숫자로 변경해준다.
+						for(int i = (int)countNum/50+1; i > 0; i--) {
+							// 5 페이지씩 나눠서 보여줄거라 5를 곱한후 계산.
+							// 예를 들어 pageNum이 3이면 버튼은 1,2,3,4,5 로 표시할것이다.
+							// 5를 넘어 6이면 6,7,8,9,10 으로 버튼을 표시한다.
+							if(pageNum >= ((i-1)*5) && pageNum < (i*5)) {
+								
+								// 최대페이지 넘어가면 i*5 말고 최대페이지까지만 출력 
+								// 만약 최대페이지가 7이면 ,6,7,8,9,10,으로 표시 안 하고,
+								// 6,7 만 표시한다.
+								if(i*5 > (int)countNum/10+1) LastNum = (int) countNum/10 + 1; 
+								else LastNum = i*5; 
+								StartNum = (i-1)*5;
+								break;
+							}							
+						}
+	
+						// 이 for문은 위에서 정해진 버튼의 개수만큼 표시한다.
+						for(int index=StartNum; index<LastNum; index++){%>
+							<a href="userManagementList.do.do?index=<%=index %>"><%=index+1 %></a>
+					  <%}
+						
+						// 선택 되어진 페이지가 최대 페이지보다 작으면 -> (하나의 페이지이동) 버튼을 생성한다.
+						if(pageNum < countNum/10+1){%>
+							<%if(pageNum+1 < LastNum-1){%>
+								 <a href = "userManagementList.do?index=<%=Integer.parseInt(request.getParameter("index"))+1%>">></a>
+							<%}else{%>
+								 <a href = "userManagementList.do?index=<%=LastNum-1%>">></a>
+							<%}
+							
+							    // 그리고 선택 되어진 페이지에 5를 더했을때 최대 페이지를 넘어가면 
+							    // ->> 버튼에 5 페이지 이동 기능을 빼준다.
+							  if(pageNum+5 > countNum/10+1){ %>
+									 <a href = "userManagementList.do?index=<%=LastNum-1%>" >>></a>
+						  	  <%}else{%>
+						  		 	<a href = "userManagementList.do?index=<%=Integer.parseInt(request.getParameter("index"))+5%>" >>></a>					  		 
+					  		  <%}
+						}						
+				  }else{		
+					// 리스트와 인덱스가 있을 경우, 즉 맨 처음 해당 리스트 페이지에 들어왔을 경 						
+						UserDao dao = new UserDao();	
+						// 찾아 올 게시글의 개수를 받아온다.		
+						double countNum = 0;
+						
+						if(request.getParameter("select") != null || request.getParameter("query") != null)
+							countNum = (double) dao.UserQueryCount(request.getParameter("select"), request.getParameter("query"));
+						else
+							countNum = (double) dao.UserCount();
+						
+						int pageNum = 1;
+						int LastNum = 0;  // 페이지 표시할 마지막 버튼 번호.
+						int StartNum = 0; // 페이지 표시할 시작 버튼 시작 번호.
+
+						for(int i = (int)countNum/50+1; i > 0; i--) {
+							if(pageNum >= ((i-1)*5) && pageNum < (i*5)) {
+								
+								if(i*5 > (int)countNum/10+1) LastNum = (int) countNum/10 + 1; 
+								else LastNum = i*5; 
+								StartNum = (i-1)*5;
+								break;
+							}							
+						}
+						// 이 for문은 위에서 정해진 버튼의 개수만큼 표시한다.
+						for(int index=StartNum; index<LastNum; index++){%>
+							<a href="userManagementList.do?index=<%=index %>"><%=index+1 %></a>
+					  <%} // 그리고 >, >> 버튼도 만들어준다.%>
+					 
+				     <a href = "userManagementList.do?index=1">></a>
+				     <a href = "userManagementList.do?index=<%=LastNum%>">>></a>
+				  <%}%>
+				</td>
+			</tr>
+      	</table>
+			</form>
+      </div>
+	
+        <jsp:include page="IncludeDownPage.jsp"/>
+</body>
+</html>

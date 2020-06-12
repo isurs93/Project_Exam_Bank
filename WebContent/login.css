@@ -1,0 +1,78 @@
+@charset "UTF-8";
+
+@import url("http://fonts.googleapis.com/earlyaccess/nanumgothic.css");
+	
+html {
+    height: 100%;
+}
+
+body {
+    width:100%;
+    height:100%;
+    margin: 0;
+      padding-top: 80px;
+      padding-bottom: 40px;
+      font-family: "Nanum Gothic", arial, helvetica, sans-serif;
+      background-repeat: no-repeat;
+      /*background:linear-gradient(to bottom right, #0098FF, #6BA8D1);*/
+      opacity: 90%;
+}
+
+.card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.form-signin .form-control {
+      position: relative;
+      height: auto;
+      -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+         box-sizing: border-box;
+      padding: 10px;
+      font-size: 16px;
+}
+
+h6{
+    text-align: center;
+}
+
+p{
+    font-size: 10px;
+}
+
+.findEmail{
+ margin-top: -10px;
+}
+
+.hint{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#footer{ 
+    position: absolute;
+    bottom: 0px; 
+    width: 800px;
+    height: 170px;
+    border-radius: 10%;
+    margin-left: 90px;
+}
+
+.footer-img{
+    justify-content: center;
+    border-radius: 30%;
+    margin-left: 700px;
+}
+
+.p{
+    margin-left: 640px;
+}
+
+.pp {
+    width: 600px;
+    text-align: center;
+    font-size: 11px;;
+}

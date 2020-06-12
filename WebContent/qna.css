@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+table{
+    border:1px solid rgb(93%, 93%, 93%);
+    width: 1200px;
+    text-align: center;
+    margin: 0 auto;
+    opacity: 90%;
+    height: 30px;
+    padding-top: 10px;
+    margin-top: 100px;
+}
+
+.no{
+    width: 200px;
+}
+
+.people{
+    width: 400px;
+}
+
+.write-day{
+    width: 400px;
+}
+
+.h1{
+    text-align: center;
+    margin-right: 1120px;
+    font-size: 30px;
+    margin-bottom: -80px;
+    margin-top: 100px;
+}
+
+
+
+
+.login{
+    font-size: 10px;
+    float: right;
+}
+
+th{
+	font-size:17px;
+}
