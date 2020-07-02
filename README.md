@@ -1,7 +1,7 @@
 # Project_Exam_Bank
 
 mvc 패턴 기반
-IDE : STS
+IDE : STS /
 Language : java, html, css, javascript /
 Back-End : jsp / 
 SQL : MySQL /
